@@ -1,10 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.get('/api/todoItems', (req, res) => {
-    const todoItems = [
+app.use(bodyParser.json());
+    let todoItems = [
         {
             todoItemId: 0,
             name: 'an item',
@@ -25,7 +26,23 @@ app.get('/api/todoItems', (req, res) => {
         }
     ];
 
-    res.json(todoItems);
-});
+    itemIds = [0,1,2];
+    
+    //ROUTE: /
+    app.get('/', function(req, res) {
+        var status = {'status': 'ok'};
+        res.join(status)
+    });
 
+    //ROUTE: api/TodoItems
+    app.get('/api/TodoItems', function(req, res) {
+        res.json(todoItems);
+    });
+
+    //ROUTE: api/TodoItems/:number
+    app.get('/api/TodoItems/:number', function(req, res) {
+        var num = parseInt(req.params.number);
+        res.json(todoItems[itemIds.indexOf(num)]);
+    });
+    
 module.exports = app;
